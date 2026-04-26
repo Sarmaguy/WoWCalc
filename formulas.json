@@ -205,5 +205,70 @@
         "quantity": 3
       }
     ]
+  },
+  {
+    "output_item": "Silvermoon Health Potion Tier 1",
+    "output_quantity": 5,
+    "modifier": "Potion_multicraft",
+    "ingredients": [
+      {
+        "item": "Sunglass Vial Tier 1",
+        "quantity": 5
+      },
+      {
+        "item": "Tranquility Bloom Tier 1",
+        "quantity": 6
+      }
+    ]
+  },
+  {
+    "output_item": "Draught of Rampant Abandon Tier 1",
+    "output_quantity": 5,
+    "modifier": "Potion_multicraft",
+    "ingredients": [
+      {
+        "item": "Mote of Primal Energy",
+        "quantity": 3
+      },
+      {
+        "item": "Sunglass Vial Tier 1",
+        "quantity": 5
+      },
+      {
+        "item": "Tranquility Bloom Tier 1",
+        "quantity": 8
+      },
+      {
+        "item": "Mana Lily Tier 1",
+        "quantity": 3
+      },
+      {
+        "item": "Sanguithorn Tier 1",
+        "quantity": 3
+      }
+    ]
+  },
+  {
+    "output_item": "Void-Shrouded Tincture Tier 1",
+    "output_quantity": 5,
+    "modifier": "Potion_multicraft",
+    "ingredients": [
+      {
+        "item": "Mote of Pure Void",
+        "quantity": 2
+      },
+      {
+        "item": "Sunglass Vial Tier 1",
+        "quantity": 5
+      },
+      {
+        "item": "Tranquility Bloom Tier 1",
+        "quantity": 8
+      },
+      {
+        "item": "Sanguithorn Tier 1",
+        "quantity": 4
+      }
+    ]
   }
 ]

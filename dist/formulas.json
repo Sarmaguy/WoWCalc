@@ -1,0 +1,274 @@
+[
+  {
+    "output_item": "Titanium Bar",
+    "output_quantity": 1,
+    "modifier": "Transmute_Modifier",
+    "ingredients": [
+      {
+        "item": "Saronite Bar",
+        "quantity": 8
+      }
+    ]
+  },
+  {
+    "output_item": "Flask of the Blood Knights Tier 1",
+    "output_quantity": 2,
+    "modifier": "multicraft_modifier",
+    "ingredients": [
+      {
+        "item": "Nocturnal Lotus",
+        "quantity": 1
+      },
+      {
+        "item": "Sanguithorn Tier 1",
+        "quantity": 6
+      },
+      {
+        "item": "Argentleaf Tier 1",
+        "quantity": 8
+      },
+      {
+        "item": "Mote of Wild Magic",
+        "quantity": 2
+      },
+      {
+        "item": "Sunglass Vial Tier 1",
+        "quantity": 2
+      }
+    ]
+  },
+  {
+    "output_item": "Flask of the Magisters Tier 1",
+    "output_quantity": 2,
+    "modifier": "multicraft_modifier",
+    "ingredients": [
+      {
+        "item": "Nocturnal Lotus",
+        "quantity": 1
+      },
+      {
+        "item": "Mote of Pure Void",
+        "quantity": 2
+      },
+      {
+        "item": "Sunglass Vial Tier 1",
+        "quantity": 2
+      },
+      {
+        "item": "Sanguithorn Tier 1",
+        "quantity": 8
+      },
+      {
+        "item": "Mana Lily Tier 1",
+        "quantity": 6
+      }
+    ]
+  },
+  {
+    "output_item": "Flask of the Shattered Sun Tier 1",
+    "output_quantity": 2,
+    "modifier": "multicraft_modifier",
+    "ingredients": [
+      {
+        "item": "Nocturnal Lotus",
+        "quantity": 1
+      },
+      {
+        "item": "Mote of Primal Energy",
+        "quantity": 2
+      },
+      {
+        "item": "Sunglass Vial Tier 1",
+        "quantity": 2
+      },
+      {
+        "item": "Azeroot Tier 1",
+        "quantity": 8
+      },
+      {
+        "item": "Argentleaf Tier 1",
+        "quantity": 6
+      }
+    ]
+  },
+  {
+    "output_item": "Flask of Thalassian Resistance Tier 1",
+    "output_quantity": 2,
+    "modifier": "multicraft_modifier",
+    "ingredients": [
+      {
+        "item": "Nocturnal Lotus",
+        "quantity": 1
+      },
+      {
+        "item": "Mote of Light",
+        "quantity": 2
+      },
+      {
+        "item": "Sunglass Vial Tier 1",
+        "quantity": 2
+      },
+      {
+        "item": "Mana Lily Tier 1",
+        "quantity": 8
+      },
+      {
+        "item": "Azeroot Tier 1",
+        "quantity": 6
+      }
+    ]
+  },
+  {
+    "output_item": "Truegold",
+    "output_quantity": 1,
+    "modifier": "Transmute_Modifier",
+    "ingredients": [
+      {
+        "item": "Pyrium Bar",
+        "quantity": 3
+      },
+      {
+        "item": "Volatile Air",
+        "quantity": 10
+      },
+      {
+        "item": "Volatile Fire",
+        "quantity": 10
+      },
+      {
+        "item": "Volatile Water",
+        "quantity": 10
+      }
+    ]
+  },
+  {
+    "output_item": "Living Steel",
+    "output_quantity": 1,
+    "modifier": "Transmute_Modifier",
+    "ingredients": [
+      {
+        "item": "Trillium Bar",
+        "quantity": 3
+      },
+      {
+        "item": "Spirit of Harmony",
+        "quantity": 3
+      }
+    ]
+  },
+  {
+    "output_item": "Potion of Recklessness Tier 1",
+    "output_quantity": 5,
+    "modifier": "Potion_multicraft",
+    "ingredients": [
+      {
+        "item": "Mote of Primal Energy",
+        "quantity": 2
+      },
+      {
+        "item": "Sunglass Vial Tier 1",
+        "quantity": 5
+      },
+      {
+        "item": "Tranquility Bloom Tier 1",
+        "quantity": 8
+      },
+      {
+        "item": "Azeroot Tier 1",
+        "quantity": 4
+      }
+    ]
+  },
+  {
+    "output_item": "Light's Potential Tier 1",
+    "output_quantity": 5,
+    "modifier": "Potion_multicraft",
+    "ingredients": [
+      {
+        "item": "Mote of Light",
+        "quantity": 1
+      },
+      {
+        "item": "Sunglass Vial Tier 1",
+        "quantity": 5
+      },
+      {
+        "item": "Tranquility Bloom Tier 1",
+        "quantity": 8
+      },
+      {
+        "item": "Argentleaf Tier 1",
+        "quantity": 3
+      },
+      {
+        "item": "Azeroot Tier 1",
+        "quantity": 3
+      }
+    ]
+  },
+  {
+    "output_item": "Silvermoon Health Potion Tier 1",
+    "output_quantity": 5,
+    "modifier": "Potion_multicraft",
+    "ingredients": [
+      {
+        "item": "Sunglass Vial Tier 1",
+        "quantity": 5
+      },
+      {
+        "item": "Tranquility Bloom Tier 1",
+        "quantity": 6
+      }
+    ]
+  },
+  {
+    "output_item": "Draught of Rampant Abandon Tier 1",
+    "output_quantity": 5,
+    "modifier": "Potion_multicraft",
+    "ingredients": [
+      {
+        "item": "Mote of Primal Energy",
+        "quantity": 3
+      },
+      {
+        "item": "Sunglass Vial Tier 1",
+        "quantity": 5
+      },
+      {
+        "item": "Tranquility Bloom Tier 1",
+        "quantity": 8
+      },
+      {
+        "item": "Mana Lily Tier 1",
+        "quantity": 3
+      },
+      {
+        "item": "Sanguithorn Tier 1",
+        "quantity": 3
+      }
+    ]
+  },
+  {
+    "output_item": "Void-Shrouded Tincture Tier 1",
+    "output_quantity": 5,
+    "modifier": "Potion_multicraft",
+    "ingredients": [
+      {
+        "item": "Mote of Pure Void",
+        "quantity": 2
+      },
+      {
+        "item": "Sunglass Vial Tier 1",
+        "quantity": 5
+      },
+      {
+        "item": "Tranquility Bloom Tier 1",
+        "quantity": 8
+      },
+      {
+        "item": "Sanguithorn Tier 1",
+        "quantity": 4
+      }
+    ]
+  }
+]

@@ -10,13 +10,17 @@ import tkinter as tk
 from tkinter import ttk, messagebox, scrolledtext
 import json
 import os
+import sys
 import csv
 import io
 
 # ---------------------------------------------------------------------------w
-# Paths — config files live next to the script
+# Paths — config files live next to the script (or next to the .exe)
 # ---------------------------------------------------------------------------
-APP_DIR = os.path.dirname(os.path.abspath(__file__))
+if getattr(sys, 'frozen', False):
+    APP_DIR = os.path.dirname(sys.executable)
+else:
+    APP_DIR = os.path.dirname(os.path.abspath(__file__))
 FORMULAS_FILE = os.path.join(APP_DIR, "formulas.json")
 SETTINGS_FILE = os.path.join(APP_DIR, "settings.json")
 
@@ -419,6 +423,10 @@ class WoWCraftCalc:
         self.data_text.pack(fill="both", expand=True)
         self.data_text.insert("1.0", EXAMPLE_DATA)
 
+        # Auto-parse when text changes (paste, type, delete)
+        self._text_debounce_id = None
+        self.data_text.bind("<<Modified>>", self._on_text_modified)
+
         vpane.add(top, weight=1)
 
         # ==================== MIDDLE — Items + Formulas ====================
@@ -437,6 +445,7 @@ class WoWCraftCalc:
             self.items_tree.heading(cid, text=txt)
             self.items_tree.column(cid, width=w, minwidth=50)
         _add_scrollbar(items_lf, self.items_tree)
+        self.items_tree.bind("<Double-1>", self._on_item_double_click)
         hpane.add(items_lf, weight=1)
 
         # ---------- Formulas ----------
@@ -500,11 +509,21 @@ class WoWCraftCalc:
             relief="sunken", anchor="w", padding=(6, 3),
         ).pack(fill="x", side="bottom")
 
+    # ------------------------------------------------------ Auto-parse
+    def _on_text_modified(self, event=None):
+        """Debounce text changes and auto-parse after 500ms."""
+        if not self.data_text.edit_modified():
+            return
+        self.data_text.edit_modified(False)
+        if self._text_debounce_id:
+            self.root.after_cancel(self._text_debounce_id)
+        self._text_debounce_id = self.root.after(500, self._parse_data)
+
     # -------------------------------------------------------------- Parse
-    def _parse_data(self):
+    def _parse_data(self, event=None):
         raw = self.data_text.get("1.0", "end").strip()
         if not raw:
-            messagebox.showwarning("Empty", "Paste Auction House data into the text area first.")
+            self.status_var.set("Paste Auction House data into the text area first.")
             return
 
         self.item_prices.clear()
@@ -524,8 +543,9 @@ class WoWCraftCalc:
                     ))
                     count += 1
             self.status_var.set(f"Parsed {count} items.")
+            self._auto_calculate()
         except Exception as exc:
-            messagebox.showerror("Parse Error", f"Could not parse data:\n{exc}")
+            self.status_var.set(f"Parse Error: {exc}")
 
     def _clear_all(self):
         self.data_text.delete("1.0", "end")
@@ -559,11 +579,12 @@ class WoWCraftCalc:
             self.formulas.append(dlg.result)
             self._save_formulas()
             self._refresh_formulas_tree()
+            self._auto_calculate()
 
     def _edit_formula(self):
         sel = self.formulas_tree.selection()
         if not sel:
-            messagebox.showinfo("Select", "Select a formula to edit first.")
+            self.status_var.set("Select a formula to edit first.")
             return
         idx = self.formulas_tree.index(sel[0])
         dlg = FormulaDialog(
@@ -576,11 +597,12 @@ class WoWCraftCalc:
             self.formulas[idx] = dlg.result
             self._save_formulas()
             self._refresh_formulas_tree()
+            self._auto_calculate()
 
     def _delete_formula(self):
         sel = self.formulas_tree.selection()
         if not sel:
-            messagebox.showinfo("Select", "Select a formula to delete first.")
+            self.status_var.set("Select a formula to delete first.")
             return
         idx = self.formulas_tree.index(sel[0])
         name = self.formulas[idx]["output_item"]
@@ -588,6 +610,7 @@ class WoWCraftCalc:
             del self.formulas[idx]
             self._save_formulas()
             self._refresh_formulas_tree()
+            self._auto_calculate()
 
     # ----------------------------------------------------------- Settings
     def _open_settings(self):
@@ -601,14 +624,65 @@ class WoWCraftCalc:
                     f"{k} = {v}" for k, v in self.settings.get("modifiers", {}).items()
                 )
             )
+            self._auto_calculate()
+
+    # ------------------------------------------------------- Inline Editing
+    def _on_item_double_click(self, event):
+        """Allow editing price by double-clicking a row in Parsed Items."""
+        item_id = self.items_tree.identify_row(event.y)
+        column = self.items_tree.identify_column(event.x)
+        if not item_id or column not in ("#2", "#3"):
+            return  # only allow editing price columns
+
+        # Get bounding box of the cell
+        bbox = self.items_tree.bbox(item_id, column)
+        if not bbox:
+            return
+
+        values = self.items_tree.item(item_id, "values")
+        current_copper = int(values[1].replace(",", ""))
+
+        # Create entry widget over the cell
+        entry = ttk.Entry(self.items_tree, width=15)
+        entry.place(x=bbox[0], y=bbox[1], width=bbox[2], height=bbox[3])
+        entry.insert(0, str(current_copper))
+        entry.select_range(0, "end")
+        entry.focus_set()
+
+        def _commit(e=None):
+            try:
+                new_price = int(float(entry.get()))
+            except ValueError:
+                entry.destroy()
+                return
+            entry.destroy()
+            name = values[0]
+            self.item_prices[name] = new_price
+            self.items_tree.item(item_id, values=(
+                name, f"{new_price:,}", format_gold(new_price), values[3],
+            ))
+            self._auto_calculate()
+
+        def _cancel(e=None):
+            entry.destroy()
+
+        entry.bind("<Return>", _commit)
+        entry.bind("<FocusOut>", _commit)
+        entry.bind("<Escape>", _cancel)
+
+    # --------------------------------------------------------- Auto Calculate
+    def _auto_calculate(self):
+        """Recalculate profits automatically if data is available."""
+        if self.item_prices and self.formulas:
+            self._calculate()
 
     # --------------------------------------------------------- Calculation
     def _calculate(self):
         if not self.item_prices:
-            messagebox.showwarning("No Data", "Parse Auction House data first.")
+            self.status_var.set("No AH data — parse Auction House data first.")
             return
         if not self.formulas:
-            messagebox.showwarning("No Formulas", "Add at least one crafting formula.")
+            self.status_var.set("No formulas — add at least one crafting formula.")
             return
 
         ah_cut = self.settings.get("ah_cut_percent", 5.0) / 100.0
@@ -662,13 +736,6 @@ class WoWCraftCalc:
                 "margin": margin,
             })
 
-        if missing:
-            messagebox.showwarning(
-                "Missing Items",
-                "These items are not in the AH data (formulas skipped):\n\n"
-                + "\n".join(f"  •  {m}" for m in sorted(missing)),
-            )
-
         # Sort descending by profit per craft
         results.sort(key=lambda r: r["profit_craft"], reverse=True)
 
@@ -692,10 +759,11 @@ class WoWCraftCalc:
             ), tags=(tag,))
 
         n_profit = sum(1 for r in results if r["profit_craft"] >= 0)
+        missing_note = f"  [Skipped: {', '.join(sorted(missing))}]" if missing else ""
         self.status_var.set(
             f"Done — {len(results)} recipes evaluated:  "
             f"{n_profit} profitable,  {len(results) - n_profit} unprofitable.   "
-            f"(AH cut {self.settings['ah_cut_percent']}%)"
+            f"(AH cut {self.settings['ah_cut_percent']}%){missing_note}"
         )
 
     # ------------------------------------------------------------- Helpers
